@@ -18,10 +18,8 @@ class ContributionsView : View {
         color = Color.argb(255, 255, 0, 255)
         style = Paint.Style.FILL_AND_STROKE
     }
-    private val squarePaddingStart = 2
-    private val squarePaddingEnd = 2
-    private  val squarePaddingTop = 2
-    private val squarePaddingBottom = 2
+    private val squareVerticalPadding = 4
+    private val squareHorizontalPadding = 4
 
     private companion object {
         val TAG = ContributionsView::class.java.simpleName
@@ -39,24 +37,37 @@ class ContributionsView : View {
 
     @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
-        val dp = resources.displayMetrics.density
-        var x = 0f
-        var y = 0f
+        val dpi = resources.displayMetrics.density
 
-        Log.d(TAG, "dp = $dp")
+
+        Log.d(TAG, "dpi = $dpi")
         Log.d(TAG, "canvasSize: width = ${canvas.width}px, height = ${canvas.height}px")
-        Log.d(TAG, "canvasSize: width = ${canvas.width / dp}dp, height = ${canvas.height / dp}dp")
+        Log.d(TAG, "canvasSize: width = ${canvas.width / dpi}dp, height = ${canvas.height / dpi}dpi")
 
+        Log.d(TAG, "count = ${canvas.width / ((squareSize + squareHorizontalPadding) * dpi).toInt()}")
+        Log.d(TAG, "余り = ${canvas.width % ((squareSize + squareHorizontalPadding) * dpi)}")
+        val offsetStart = canvas.width % ((squareSize + squareHorizontalPadding) * dpi) / 2
+        var x1 = offsetStart
+        var x2 = x1 + squareSize * dpi
 
         // drawRectを使って矩形を描画する、引数に座標を設定
         // (x1,y1,x2,y2,paint) 左上の座標(x1,y1), 右下の座標(x2,y2)
-        canvas.drawRect(
-                x + squarePaddingStart * dp,
-                y + squarePaddingTop * dp,
-                x + (squarePaddingStart + squareSize + squarePaddingEnd) * dp,
-                y + (squarePaddingTop + squareSize + squarePaddingBottom) * dp,
-                squarePaint
-        )
-        Log.d(TAG, "drawSize: width = ${300f / dp}dp, height = ${300f / dp}dp")
+        while(x2 < canvas.width) {
+            var y1 = 0f
+            var y2 = y1 + squareSize * dpi
+            for (i in 0..6) {
+                canvas.drawRect(
+                        x1,
+                        y1,
+                        x2,
+                        y2,
+                        squarePaint
+                )
+                y1 = y2 + squareVerticalPadding * dpi
+                y2 = y1 + squareSize * dpi
+            }
+            x1 = x2 + squareHorizontalPadding * dpi
+            x2 = x1 + squareSize * dpi
+        }
     }
 }
