@@ -3,8 +3,6 @@ package me.hiroaki.contributionsview
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
@@ -14,10 +12,7 @@ import android.view.View
 class ContributionsView : View {
 
     private val squareSize = 12
-    private val squarePaint = Paint().apply {
-        color = Color.argb(255, 255, 0, 255)
-        style = Paint.Style.FILL_AND_STROKE
-    }
+    private val squarePaint = SquarePaint()
     private val squareVerticalPadding = 4
     private val squareHorizontalPadding = 4
 
@@ -61,7 +56,7 @@ class ContributionsView : View {
                         y1,
                         x2,
                         y2,
-                        squarePaint
+                        squarePaint.getPaint(0)
                 )
                 y1 = y2 + squareVerticalPadding * dpi
                 y2 = y1 + squareSize * dpi
