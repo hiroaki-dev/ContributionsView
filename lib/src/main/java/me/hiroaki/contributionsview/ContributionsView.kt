@@ -13,6 +13,7 @@ import java.util.*
 
 class ContributionsView : View {
 
+    private val dayOfWeekPaint = DayOfWeekPaint()
     private val squareSize = 12
     private val squarePaint = SquarePaint()
     private val squareVerticalPadding = 4
@@ -49,8 +50,26 @@ class ContributionsView : View {
         Log.d(TAG, "余り = ${canvas.width % ((squareSize + squareHorizontalPadding) * dpi)}")
 
         // TODO: 曜日出力できるようになったらその横幅を考慮
-        val offsetStart = canvas.width % ((squareSize + squareHorizontalPadding) * dpi) / 2
-        drawContributions(canvas, offsetStart)
+        val offsetStart = (canvas.width - dayOfWeekPaint.getDayOfWeekWidth()) % ((squareSize + squareHorizontalPadding) * dpi) / 2
+        drawDayOfWeek(canvas, offsetStart)
+        drawContributions(canvas, offsetStart + dayOfWeekPaint.getDayOfWeekWidth())
+
+    }
+
+    private fun drawDayOfWeek(canvas: Canvas, offsetStart: Float = 0f, offsetTop: Float = 0f) {
+        val dpi = resources.displayMetrics.density
+
+        dayOfWeekPaint.dayOfWeeks.forEach { d ->
+            val tmp = d.key.value + 1
+            val n = (if (tmp > 7) 1 else tmp) - 1
+            Log.d(TAG, "offsetTop + n * squareSize * dpi + n * squareVerticalPadding = ${offsetTop + n * squareSize * dpi + n * squareVerticalPadding * dpi}")
+            canvas.drawText(
+                    d.value,
+                    offsetStart,
+                    offsetTop + n * squareSize * dpi + n * squareVerticalPadding * dpi + dayOfWeekPaint.fontSize,
+                    dayOfWeekPaint.getPaint()
+            )
+        }
     }
 
     private fun drawContributions(canvas: Canvas, offsetStart: Float = 0f, offsetTop: Float = 0f) {
