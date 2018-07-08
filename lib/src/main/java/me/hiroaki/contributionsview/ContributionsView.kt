@@ -47,24 +47,29 @@ class ContributionsView : View {
 
         Log.d(TAG, "count = ${canvas.width / ((squareSize + squareHorizontalPadding) * dpi).toInt()}")
         Log.d(TAG, "余り = ${canvas.width % ((squareSize + squareHorizontalPadding) * dpi)}")
-        val weeks = canvas.width / ((squareSize + squareHorizontalPadding) * dpi).toInt()
+
+        // TODO: 曜日出力できるようになったらその横幅を考慮
         val offsetStart = canvas.width % ((squareSize + squareHorizontalPadding) * dpi) / 2
+        drawContributions(canvas, offsetStart)
+    }
+
+    private fun drawContributions(canvas: Canvas, offsetStart: Float = 0f, offsetTop: Float = 0f) {
+        val dpi = resources.displayMetrics.density
+
+        val weeks = ((canvas.width - offsetStart) / ((squareSize + squareHorizontalPadding) * dpi)).toInt()
         var x1 = offsetStart
         var x2 = x1 + squareSize * dpi
 
         val tmp = LocalDate.now().dayOfWeek.value + 1
         val todayDayOfWeek = if (tmp > 7) 1 else tmp
 
-        // drawRectを使って矩形を描画する、引数に座標を設定
         // (x1,y1,x2,y2,paint) 左上の座標(x1,y1), 右下の座標(x2,y2)
         for (week in 1..weeks) {
-            var y1 = 0f
+            var y1 = offsetTop
             var y2 = y1 + squareSize * dpi
             for (dayOfWeek in 1..7) {
                 if (week == weeks && dayOfWeek > todayDayOfWeek) break
                 val commitDate = LocalDate.now().minusDays(((weeks - week) * 7 + (dayOfWeek - 1)).toLong())
-                Log.d(TAG, "commit amount = ${contributions[commitDate] ?: 0}")
-                Log.d(TAG, "week = $week, dayOfWeek = $dayOfWeek, todayDayOfWeek = $todayDayOfWeek")
                 canvas.drawRect(
                         x1,
                         y1,
@@ -74,7 +79,6 @@ class ContributionsView : View {
                 )
                 y1 = y2 + squareVerticalPadding * dpi
                 y2 = y1 + squareSize * dpi
-//                commitDate = commitDate.plusDays(((week - 1) * 7 + (dayOfWeek - 1)).toLong())
             }
             x1 = x2 + squareHorizontalPadding * dpi
             x2 = x1 + squareSize * dpi
