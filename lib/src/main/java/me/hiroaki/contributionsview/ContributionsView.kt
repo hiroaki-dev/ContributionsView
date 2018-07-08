@@ -21,6 +21,8 @@ class ContributionsView : View {
     private val contributions: Map<LocalDate, Int> by lazy {
         HashMap<LocalDate, Int>().apply {
             put(LocalDate.now(), 7)
+            put(LocalDate.now().minusDays(8.toLong()), 1)
+            put(LocalDate.now().minusDays(6.toLong()), 3)
         }
     }
 
@@ -49,7 +51,6 @@ class ContributionsView : View {
         Log.d(TAG, "count = ${canvas.width / ((squareSize + squareHorizontalPadding) * dpi).toInt()}")
         Log.d(TAG, "余り = ${canvas.width % ((squareSize + squareHorizontalPadding) * dpi)}")
 
-        // TODO: 曜日出力できるようになったらその横幅を考慮
         val offsetStart = (canvas.width - dayOfWeekPaint.getDayOfWeekWidth()) % ((squareSize + squareHorizontalPadding) * dpi) / 2
         drawDayOfWeek(canvas, offsetStart)
         drawContributions(canvas, offsetStart + dayOfWeekPaint.getDayOfWeekWidth())
@@ -62,7 +63,6 @@ class ContributionsView : View {
         dayOfWeekPaint.dayOfWeeks.forEach { d ->
             val tmp = d.key.value + 1
             val n = (if (tmp > 7) 1 else tmp) - 1
-            Log.d(TAG, "offsetTop + n * squareSize * dpi + n * squareVerticalPadding = ${offsetTop + n * squareSize * dpi + n * squareVerticalPadding * dpi}")
             canvas.drawText(
                     d.value,
                     offsetStart,
@@ -86,9 +86,9 @@ class ContributionsView : View {
         for (week in 1..weeks) {
             var y1 = offsetTop
             var y2 = y1 + squareSize * dpi
-            for (dayOfWeek in 1..7) {
-                if (week == weeks && dayOfWeek > todayDayOfWeek) break
-                val commitDate = LocalDate.now().minusDays(((weeks - week) * 7 + (dayOfWeek - 1)).toLong())
+            for (n in 1..7) {
+                if (week == weeks && n > todayDayOfWeek) break
+                val commitDate = LocalDate.now().minusDays(((weeks - week) * 7 - (todayDayOfWeek - n)).toLong())
                 canvas.drawRect(
                         x1,
                         y1,

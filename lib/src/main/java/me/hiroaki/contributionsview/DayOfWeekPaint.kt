@@ -14,7 +14,6 @@ class DayOfWeekPaint(
         vararg dayOfWeeks: DayOfWeek = arrayOf(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY)
 ) {
 
-//    val dayOfWeeks: Array<String> = Array(dayOfWeeks.size) { i -> dayOfWeeks[i].getDisplayName(textStyle, locale)}
     val dayOfWeeks: Map<DayOfWeek, String> = dayOfWeeks.associate { d -> Pair(d, d.getDisplayName(textStyle, locale)) }
     private val dayOfWeekPaint = Paint().apply {
         color = textColor
