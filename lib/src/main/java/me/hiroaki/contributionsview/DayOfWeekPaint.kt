@@ -22,10 +22,7 @@ class DayOfWeekPaint(
     }
 
 
-    fun getDayOfWeekWidth(): Float {
-        val maxLengthDayText = dayOfWeeks.maxBy { s -> s.value.length }?.value ?: ""
-        return dayOfWeekPaint.measureText(maxLengthDayText)
-    }
+    fun getDayOfWeekWidth(): Float = dayOfWeeks.map { d -> dayOfWeekPaint.measureText(d.value) }.max() ?: 0f
 
     fun getPaint(): Paint = this.dayOfWeekPaint
 }
