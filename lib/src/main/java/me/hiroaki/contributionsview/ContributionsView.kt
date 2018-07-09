@@ -8,11 +8,13 @@ import android.util.Log
 import android.view.View
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.threeten.bp.LocalDate
+import org.threeten.bp.Month
 import java.util.*
 
 
 class ContributionsView : View {
 
+    private val monthPaint = MonthPaint()
     private val dayOfWeekPaint = DayOfWeekPaint()
     private val squareSize = 12
     private val squarePaint = SquarePaint()
@@ -52,8 +54,8 @@ class ContributionsView : View {
         Log.d(TAG, "余り = ${canvas.width % ((squareSize + squareHorizontalPadding) * dpi)}")
 
         val offsetStart = (canvas.width - dayOfWeekPaint.getDayOfWeekWidth()) % ((squareSize + squareHorizontalPadding) * dpi) / 2
-        drawDayOfWeek(canvas, offsetStart)
-        drawContributions(canvas, offsetStart + dayOfWeekPaint.getDayOfWeekWidth())
+        drawDayOfWeek(canvas, offsetStart, monthPaint.getMonthHeight())
+        drawContributions(canvas, offsetStart + dayOfWeekPaint.getDayOfWeekWidth(), monthPaint.getMonthHeight())
 
     }
 
@@ -89,6 +91,11 @@ class ContributionsView : View {
             for (n in 1..7) {
                 if (week == weeks && n > todayDayOfWeek) break
                 val commitDate = LocalDate.now().minusDays(((weeks - week) * 7 - (todayDayOfWeek - n)).toLong())
+
+                // 月の描画
+                if (commitDate.dayOfMonth == 1) drawMonth(canvas, commitDate.month, x1)
+
+                // 四角の描画
                 canvas.drawRect(
                         x1,
                         y1,
@@ -96,11 +103,24 @@ class ContributionsView : View {
                         y2,
                         squarePaint.getPaint(contributions[commitDate] ?: 0)
                 )
+
                 y1 = y2 + squareVerticalPadding * dpi
                 y2 = y1 + squareSize * dpi
             }
             x1 = x2 + squareHorizontalPadding * dpi
             x2 = x1 + squareSize * dpi
         }
+    }
+
+    private fun drawMonth(canvas: Canvas, month: Month, offsetStart: Float = 0f, offsetTop: Float = 0f) {
+        val dpi = resources.displayMetrics.density
+        val monthInfo = monthPaint.getMonth(month)
+
+        canvas.drawText(
+                monthInfo.first,
+                offsetStart + squareSize * dpi / 2 - monthInfo.second / 2,
+                monthPaint.getMonthHeight(),
+                monthPaint.getPaint()
+        )
     }
 }
