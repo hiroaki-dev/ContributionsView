@@ -18,8 +18,8 @@ class ContributionsView : View {
     private val dayOfWeekPaint = DayOfWeekPaint()
     private val squareSize = 12
     private val squarePaint = SquarePaint()
-    private val squareVerticalPadding = 4
-    private val squareHorizontalPadding = 4
+    private val squareVerticalSpace = 4
+    private val squareHorizontalSpace = 4
     private val contributions: Map<LocalDate, Int> by lazy {
         HashMap<LocalDate, Int>().apply {
             put(LocalDate.now(), 7)
@@ -50,10 +50,10 @@ class ContributionsView : View {
         Log.d(TAG, "canvasSize: width = ${canvas.width}px, height = ${canvas.height}px")
         Log.d(TAG, "canvasSize: width = ${canvas.width / dpi}dp, height = ${canvas.height / dpi}dpi")
 
-        Log.d(TAG, "count = ${canvas.width / ((squareSize + squareHorizontalPadding) * dpi).toInt()}")
-        Log.d(TAG, "余り = ${canvas.width % ((squareSize + squareHorizontalPadding) * dpi)}")
+        Log.d(TAG, "count = ${canvas.width / ((squareSize + squareHorizontalSpace) * dpi).toInt()}")
+        Log.d(TAG, "余り = ${canvas.width % ((squareSize + squareHorizontalSpace) * dpi)}")
 
-        val offsetStart = (canvas.width - dayOfWeekPaint.getDayOfWeekWidth()) % ((squareSize + squareHorizontalPadding) * dpi) / 2
+        val offsetStart = (canvas.width - dayOfWeekPaint.getDayOfWeekWidth()) % ((squareSize + squareHorizontalSpace) * dpi) / 2
         drawDayOfWeek(canvas, offsetStart, monthPaint.getMonthHeight())
         drawContributions(canvas, offsetStart + dayOfWeekPaint.getDayOfWeekWidth(), monthPaint.getMonthHeight())
 
@@ -68,7 +68,7 @@ class ContributionsView : View {
             canvas.drawText(
                     d.value,
                     offsetStart,
-                    offsetTop + n * squareSize * dpi + n * squareVerticalPadding * dpi + dayOfWeekPaint.fontSize,
+                    offsetTop + n * squareSize * dpi + n * squareVerticalSpace * dpi + dayOfWeekPaint.fontSize,
                     dayOfWeekPaint.getPaint()
             )
         }
@@ -77,7 +77,7 @@ class ContributionsView : View {
     private fun drawContributions(canvas: Canvas, offsetStart: Float = 0f, offsetTop: Float = 0f) {
         val dpi = resources.displayMetrics.density
 
-        val weeks = ((canvas.width - offsetStart) / ((squareSize + squareHorizontalPadding) * dpi)).toInt()
+        val weeks = ((canvas.width - offsetStart) / ((squareSize + squareHorizontalSpace) * dpi)).toInt()
         var x1 = offsetStart
         var x2 = x1 + squareSize * dpi
 
@@ -104,10 +104,10 @@ class ContributionsView : View {
                         squarePaint.getPaint(contributions[commitDate] ?: 0)
                 )
 
-                y1 = y2 + squareVerticalPadding * dpi
+                y1 = y2 + squareVerticalSpace * dpi
                 y2 = y1 + squareSize * dpi
             }
-            x1 = x2 + squareHorizontalPadding * dpi
+            x1 = x2 + squareHorizontalSpace * dpi
             x2 = x1 + squareSize * dpi
         }
     }
