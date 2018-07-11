@@ -10,6 +10,9 @@
     <me.hiroaki.contributionsview.ContributionsView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:day_of_week_font_size="12sp"
+        app:month_font_size="12sp"
+        app:square_size="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

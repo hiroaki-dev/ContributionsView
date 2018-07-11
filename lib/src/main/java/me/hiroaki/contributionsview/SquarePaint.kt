@@ -1,14 +1,13 @@
 package me.hiroaki.contributionsview
 
-import android.graphics.Color
 import android.graphics.Paint
 
 class SquarePaint(
-        colorOfNoCommit: Int = Color.argb(255, 238, 238, 238),
-        colorOfOneCommit: Int = Color.argb(255, 204, 226, 149),
-        colorOfTwoCommit: Int = Color.argb(255, 140, 198, 120),
-        colorOfThreeCommit: Int = Color.argb(255, 73, 150, 71),
-        colorOfOverFourCommit: Int = Color.argb(255, 47, 94, 46)
+        colorOfNoCommit: Int,
+        colorOfOneCommit: Int,
+        colorOfTwoCommit: Int,
+        colorOfThreeCommit: Int,
+        colorOfOverFourCommit: Int
 ) {
 
     private val squarePaint0 = Paint().apply {
