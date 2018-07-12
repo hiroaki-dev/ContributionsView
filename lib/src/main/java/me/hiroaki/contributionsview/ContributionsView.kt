@@ -79,29 +79,41 @@ class ContributionsView : View {
         xmlAttributes.recycle()
     }
 
-    @SuppressLint("DrawAllocation")
-    override fun onDraw(canvas: Canvas) {
-        val offsetStart = (canvas.width - dayOfWeekPaint.getDayOfWeekWidth()) % (squareSize + squareHorizontalSpace) / 2
-        drawDayOfWeek(canvas, offsetStart, monthPaint.getMonthHeight())
-        drawContributions(canvas, offsetStart + dayOfWeekPaint.getDayOfWeekWidth(), monthPaint.getMonthHeight())
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val dpi = resources.displayMetrics.density
+
+        val minWidth = paddingStart + paddingEnd + (120 * dpi).toInt()
+        val minHeight = paddingTop + paddingBottom + (100 * dpi).toInt()
+
+        setMeasuredDimension(View.resolveSize(minWidth, widthMeasureSpec), View.resolveSize(minHeight, heightMeasureSpec))
     }
 
-    private fun drawDayOfWeek(canvas: Canvas, offsetStart: Float = 0f, offsetTop: Float = 0f) {
+    @SuppressLint("DrawAllocation")
+    override fun onDraw(canvas: Canvas) {
+        // TODO: さらにdayOfWeekとContributionsの間隔も考慮するようにする
+        val offsetStart = (canvas.width - dayOfWeekPaint.getDayOfWeekWidth() - paddingStart - paddingEnd) % (squareSize + squareHorizontalSpace) / 2
+        drawDayOfWeek(canvas, paddingStart.toFloat(), paddingTop + monthPaint.getMonthHeight())
+        // TODO: さらにdayOfWeekとContributionsの間隔、monthとContributionsの間隔も考慮するようにする
+        drawContributions(canvas, paddingStart + offsetStart + dayOfWeekPaint.getDayOfWeekWidth(), paddingTop + monthPaint.getMonthHeight(), paddingEnd.toFloat())
+    }
+
+    private fun drawDayOfWeek(canvas: Canvas, spaceLeft: Float = 0f, spaceTop: Float = 0f) {
         dayOfWeekPaint.dayOfWeeks.forEach { d ->
             val tmp = d.key.value + 1
             val n = (if (tmp > 7) 1 else tmp) - 1
+            dayOfWeekPaint.getDayOfWeekWidth()
             canvas.drawText(
                     d.value,
-                    offsetStart,
-                    offsetTop + n * squareSize + n * squareVerticalSpace + dayOfWeekPaint.fontSize,
+                    spaceLeft,
+                    spaceTop + n * squareSize + n * squareVerticalSpace + dayOfWeekPaint.fontSize,
                     dayOfWeekPaint.getPaint()
             )
         }
     }
 
-    private fun drawContributions(canvas: Canvas, offsetStart: Float = 0f, offsetTop: Float = 0f) {
-        val weeks = ((canvas.width - offsetStart) / (squareSize + squareHorizontalSpace)).toInt()
-        var x1 = offsetStart
+    private fun drawContributions(canvas: Canvas, spaceLeft: Float = 0f, spaceTop: Float = 0f, spaceRight: Float = 0f) {
+        val weeks = ((canvas.width - spaceLeft - spaceRight) / (squareSize + squareHorizontalSpace)).toInt()
+        var x1 = spaceLeft
         var x2 = x1 + squareSize
 
         val tmp = LocalDate.now().dayOfWeek.value + 1
@@ -109,14 +121,14 @@ class ContributionsView : View {
 
         // (x1,y1,x2,y2,paint) 左上の座標(x1,y1), 右下の座標(x2,y2)
         for (week in 1..weeks) {
-            var y1 = offsetTop
+            var y1 = spaceTop
             var y2 = y1 + squareSize
             for (n in 1..7) {
                 if (week == weeks && n > todayDayOfWeek) break
                 val commitDate = LocalDate.now().minusDays(((weeks - week) * 7 - (todayDayOfWeek - n)).toLong())
 
                 // 月の描画
-                if (commitDate.dayOfMonth == 1) drawMonth(canvas, commitDate.month, x1)
+                if (commitDate.dayOfMonth == 1) drawMonth(canvas, commitDate.month, x1, paddingTop.toFloat())
 
                 // 四角の描画
                 canvas.drawRect(
@@ -135,13 +147,13 @@ class ContributionsView : View {
         }
     }
 
-    private fun drawMonth(canvas: Canvas, month: Month, offsetStart: Float = 0f, offsetTop: Float = 0f) {
+    private fun drawMonth(canvas: Canvas, month: Month, spaceLeft: Float = 0f, spaceTop: Float = 0f) {
         val monthInfo = monthPaint.getMonth(month)
 
         canvas.drawText(
                 monthInfo.first,
-                offsetStart + squareSize / 2 - monthInfo.second / 2,
-                monthPaint.getMonthHeight(),
+                spaceLeft + squareSize / 2 - monthInfo.second / 2,
+                spaceTop + monthPaint.getMonthHeight(),
                 monthPaint.getPaint()
         )
     }

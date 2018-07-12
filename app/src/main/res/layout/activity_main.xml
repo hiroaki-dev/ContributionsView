@@ -13,6 +13,7 @@
         app:day_of_week_font_size="12sp"
         app:month_font_size="12sp"
         app:square_size="8dp"
+        android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
