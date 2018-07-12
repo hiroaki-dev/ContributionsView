@@ -1,6 +1,5 @@
 package me.hiroaki.contributionsview
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -20,6 +19,8 @@ class ContributionsView : View {
     private val squarePaint: SquarePaint
     private val squareVerticalSpace: Float
     private val squareHorizontalSpace: Float
+    private val contributionsLeftSpace: Float
+    private val contributionsTopSpace: Float
     private val contributions: Map<LocalDate, Int> by lazy {
         HashMap<LocalDate, Int>().apply {
             put(LocalDate.now(), 7)
@@ -67,6 +68,9 @@ class ContributionsView : View {
                 )
         )
 
+        contributionsLeftSpace = xmlAttributes.getDimension(R.styleable.ContributionsView_contributions_left_space, 9f)
+        contributionsTopSpace = xmlAttributes.getDimension(R.styleable.ContributionsView_contributions_top_space, 15f)
+
         dayOfWeekPaint = DayOfWeekPaint(
                 xmlAttributes.getDimension(R.styleable.ContributionsView_day_of_week_font_size, 31.5f),
                 xmlAttributes.getColor(R.styleable.ContributionsView_day_of_week_font_color, Color.GRAY)
@@ -88,13 +92,21 @@ class ContributionsView : View {
         setMeasuredDimension(View.resolveSize(minWidth, widthMeasureSpec), View.resolveSize(minHeight, heightMeasureSpec))
     }
 
-    @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
-        // TODO: さらにdayOfWeekとContributionsの間隔も考慮するようにする
-        val offsetStart = (canvas.width - dayOfWeekPaint.getDayOfWeekWidth() - paddingStart - paddingEnd) % (squareSize + squareHorizontalSpace) / 2
-        drawDayOfWeek(canvas, paddingStart.toFloat(), paddingTop + monthPaint.getMonthHeight())
-        // TODO: さらにdayOfWeekとContributionsの間隔、monthとContributionsの間隔も考慮するようにする
-        drawContributions(canvas, paddingStart + offsetStart + dayOfWeekPaint.getDayOfWeekWidth(), paddingTop + monthPaint.getMonthHeight(), paddingEnd.toFloat())
+        val offsetStart = (canvas.width - dayOfWeekPaint.getDayOfWeekWidth() - paddingStart - paddingEnd - contributionsLeftSpace) % (squareSize + squareHorizontalSpace) / 2
+
+        drawDayOfWeek(
+                canvas,
+                paddingStart.toFloat(),
+                paddingTop + monthPaint.getMonthHeight()
+        )
+
+        drawContributions(
+                canvas,
+                paddingStart + offsetStart + dayOfWeekPaint.getDayOfWeekWidth() + contributionsLeftSpace,
+                paddingTop + monthPaint.getMonthHeight() + contributionsTopSpace,
+                paddingEnd.toFloat()
+        )
     }
 
     private fun drawDayOfWeek(canvas: Canvas, spaceLeft: Float = 0f, spaceTop: Float = 0f) {
