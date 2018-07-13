@@ -21,11 +21,7 @@ class ContributionsView : View {
     private val squareHorizontalSpace: Float
     private val contributionsLeftSpace: Float
     private val contributionsTopSpace: Float
-    var contributions: Map<LocalDate, Int> = HashMap()
-        set(value) {
-            field = value
-            invalidate()
-        }
+    private var contributions: HashMap<LocalDate, Int> = HashMap()
 
     private companion object {
         val TAG = ContributionsView::class.java.simpleName
@@ -79,6 +75,11 @@ class ContributionsView : View {
                 xmlAttributes.getColor(R.styleable.ContributionsView_month_font_color, Color.GRAY)
         )
         xmlAttributes.recycle()
+    }
+
+    fun setContributionsMap(contributions: HashMap<LocalDate, Int>) {
+        this.contributions = contributions
+        invalidate()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
