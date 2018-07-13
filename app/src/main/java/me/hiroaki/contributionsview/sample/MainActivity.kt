@@ -10,7 +10,6 @@ class MainActivity : AppCompatActivity() {
 
     private val sampleContributions by lazy {
         HashMap<LocalDate, Int>().apply {
-            put(LocalDate.now(), 7)
             put(LocalDate.now().minusDays(8.toLong()), 1)
             put(LocalDate.now().minusDays(6.toLong()), 3)
         }
@@ -21,5 +20,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         contributionsView.setContributionsMap(sampleContributions)
+
+        setTodayCommitButton.setOnClickListener { contributionsView.setCommit(LocalDate.now(), 7) }
+
     }
 }

@@ -11,13 +11,22 @@
         android:id="@+id/contributionsView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:day_of_week_font_size="12sp"
-        app:month_font_size="12sp"
-        app:square_size="8dp"
         android:padding="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:day_of_week_font_size="12sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:month_font_size="12sp"
+        app:square_size="8dp"/>
+
+    <Button
+        android:id="@+id/setTodayCommitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/set_today_commit"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contributionsView"/>
 
 </android.support.constraint.ConstraintLayout>

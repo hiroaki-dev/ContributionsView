@@ -82,6 +82,11 @@ class ContributionsView : View {
         invalidate()
     }
 
+    fun setCommit(date: LocalDate, amount: Int) {
+        contributions[date] = amount
+        invalidate()
+    }
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val dpi = resources.displayMetrics.density
 
