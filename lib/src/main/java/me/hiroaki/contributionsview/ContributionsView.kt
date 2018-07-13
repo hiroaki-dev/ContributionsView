@@ -21,13 +21,11 @@ class ContributionsView : View {
     private val squareHorizontalSpace: Float
     private val contributionsLeftSpace: Float
     private val contributionsTopSpace: Float
-    private val contributions: Map<LocalDate, Int> by lazy {
-        HashMap<LocalDate, Int>().apply {
-            put(LocalDate.now(), 7)
-            put(LocalDate.now().minusDays(8.toLong()), 1)
-            put(LocalDate.now().minusDays(6.toLong()), 3)
+    var contributions: Map<LocalDate, Int> = HashMap()
+        set(value) {
+            field = value
+            invalidate()
         }
-    }
 
     private companion object {
         val TAG = ContributionsView::class.java.simpleName

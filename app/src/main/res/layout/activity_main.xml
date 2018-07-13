@@ -8,6 +8,7 @@
     tools:context=".MainActivity">
 
     <me.hiroaki.contributionsview.ContributionsView
+        android:id="@+id/contributionsView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:day_of_week_font_size="12sp"
