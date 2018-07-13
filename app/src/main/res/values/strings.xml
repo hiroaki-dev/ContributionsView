@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">ContributionsView</string>
     <string name="set_today_commit">set today commit</string>
+    <string name="add_yesterday_commit">add yesterday commit</string>
 </resources>

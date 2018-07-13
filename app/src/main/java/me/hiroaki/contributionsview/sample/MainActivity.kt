@@ -23,5 +23,9 @@ class MainActivity : AppCompatActivity() {
 
         setTodayCommitButton.setOnClickListener { contributionsView.setCommit(LocalDate.now(), 7) }
 
+        addYesterdayDayCommitButton.setOnClickListener {
+            val tmp = LocalDate.now().minusDays(1)
+            contributionsView.addCommit(tmp, 1)
+        }
     }
 }
