@@ -141,6 +141,7 @@ class ContributionsView : View {
 
         val tmp = LocalDate.now().dayOfWeek.value + 1
         val todayDayOfWeek = if (tmp > 7) 1 else tmp
+        var commitDate = LocalDate.now().minusWeeks((weeks - 1).toLong()).let { it.minusDays((it.dayOfWeek.value).toLong()) }
 
         // (x1,y1,x2,y2,paint) 左上の座標(x1,y1), 右下の座標(x2,y2)
         for (week in 1..weeks) {
@@ -148,7 +149,6 @@ class ContributionsView : View {
             var y2 = y1 + squareSize
             for (n in 1..7) {
                 if (week == weeks && n > todayDayOfWeek) break
-                val commitDate = LocalDate.now().minusDays(((weeks - week) * 7).toLong()).plusDays((n - 1).toLong())
                 // 月の描画
                 if (commitDate.dayOfMonth == 1) drawMonth(canvas, commitDate.month, x1, paddingTop.toFloat())
 
@@ -161,6 +161,7 @@ class ContributionsView : View {
                         squarePaint.getPaint(contributions[commitDate] ?: 0)
                 )
 
+                commitDate = commitDate.plusDays(1)
                 y1 = y2 + squareVerticalSpace
                 y2 = y1 + squareSize
             }
