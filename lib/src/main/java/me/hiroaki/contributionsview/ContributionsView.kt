@@ -71,17 +71,24 @@ class ContributionsView : View {
         contributionsLeftSpace = xmlAttributes.getDimension(R.styleable.ContributionsView_contributions_left_space, 9f)
         contributionsTopSpace = xmlAttributes.getDimension(R.styleable.ContributionsView_contributions_top_space, 15f)
 
+        isMondayStart = xmlAttributes.getBoolean(R.styleable.ContributionsView_is_monday_start, true)
+        val defaultDayOfWeeks = if (isMondayStart) {
+            arrayOf(DayOfWeek.TUESDAY, DayOfWeek.THURSDAY, DayOfWeek.SATURDAY)
+        } else {
+            arrayOf(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY)
+        }
         dayOfWeekPaint = DayOfWeekPaint(
                 xmlAttributes.getDimension(R.styleable.ContributionsView_day_of_week_font_size, 31.5f),
-                xmlAttributes.getColor(R.styleable.ContributionsView_day_of_week_font_color, Color.GRAY)
+                xmlAttributes.getColor(R.styleable.ContributionsView_day_of_week_font_color, Color.GRAY),
+                dayOfWeeks = *defaultDayOfWeeks
         )
+
 
         monthPaint = MonthPaint(
                 xmlAttributes.getDimension(R.styleable.ContributionsView_month_font_size, 31.5f),
                 xmlAttributes.getColor(R.styleable.ContributionsView_month_font_color, Color.GRAY)
         )
 
-        isMondayStart = xmlAttributes.getBoolean(R.styleable.ContributionsView_is_monday_start, true)
         xmlAttributes.recycle()
     }
 

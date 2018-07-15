@@ -10,7 +10,7 @@ class DayOfWeekPaint(
         private val textColor: Int,
         private val textStyle: TextStyle = TextStyle.SHORT,
         private val locale: Locale = Locale.ENGLISH,
-        vararg dayOfWeeks: DayOfWeek = arrayOf(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY)
+        vararg dayOfWeeks: DayOfWeek
 ) {
 
     val dayOfWeeks: Map<DayOfWeek, String> = dayOfWeeks.associate { d -> Pair(d, d.getDisplayName(textStyle, locale)) }
