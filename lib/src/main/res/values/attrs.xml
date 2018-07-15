@@ -17,5 +17,7 @@
 
         <attr name="month_font_size" format="dimension"/>
         <attr name="month_font_color" format="color"/>
+
+        <attr name="is_monday_start" format="boolean"/>
     </declare-styleable>
 </resources>

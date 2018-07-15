@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.util.AttributeSet
 import android.view.View
 import com.jakewharton.threetenabp.AndroidThreeTen
+import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.Month
 import java.util.*
@@ -22,6 +23,11 @@ class ContributionsView : View {
     private val contributionsLeftSpace: Float
     private val contributionsTopSpace: Float
     private var contributions: HashMap<LocalDate, Int> = HashMap()
+    private var isMondayStart: Boolean
+        set(value) {
+            field = value
+            invalidate()
+        }
 
     private companion object {
         val TAG = ContributionsView::class.java.simpleName
@@ -74,6 +80,8 @@ class ContributionsView : View {
                 xmlAttributes.getDimension(R.styleable.ContributionsView_month_font_size, 31.5f),
                 xmlAttributes.getColor(R.styleable.ContributionsView_month_font_color, Color.GRAY)
         )
+
+        isMondayStart = xmlAttributes.getBoolean(R.styleable.ContributionsView_is_monday_start, true)
         xmlAttributes.recycle()
     }
 
@@ -121,17 +129,27 @@ class ContributionsView : View {
     }
 
     private fun drawDayOfWeek(canvas: Canvas, spaceLeft: Float = 0f, spaceTop: Float = 0f) {
-        dayOfWeekPaint.dayOfWeeks.forEach { d ->
-            val tmp = d.key.value + 1
-            val n = (if (tmp > 7) 1 else tmp) - 1
-            dayOfWeekPaint.getDayOfWeekWidth()
-            canvas.drawText(
-                    d.value,
-                    spaceLeft,
-                    spaceTop + n * squareSize + n * squareVerticalSpace + dayOfWeekPaint.fontSize,
-                    dayOfWeekPaint.getPaint()
-            )
+        val dayOfWeeks: List<DayOfWeek> = if (isMondayStart) {
+            DayOfWeek.values().toList()
+        } else {
+            arrayListOf(arrayListOf(DayOfWeek.SUNDAY), DayOfWeek.values().dropLast(1)).flatMap { it }
         }
+
+        dayOfWeeks.filter { dayOfWeekPaint.dayOfWeeks[it] != null }
+                .forEach { d ->
+                    val n = if (isMondayStart) {
+                        d.value
+                    } else {
+                        val tmp = d.value + 1
+                        (if (tmp > 7) 1 else tmp)
+                    } - 1
+                    canvas.drawText(
+                            dayOfWeekPaint.dayOfWeeks[d],
+                            spaceLeft,
+                            spaceTop + n * squareSize + n * squareVerticalSpace + dayOfWeekPaint.fontSize,
+                            dayOfWeekPaint.getPaint()
+                    )
+                }
     }
 
     private fun drawContributions(canvas: Canvas, spaceLeft: Float = 0f, spaceTop: Float = 0f, spaceRight: Float = 0f) {
@@ -139,9 +157,16 @@ class ContributionsView : View {
         var x1 = spaceLeft
         var x2 = x1 + squareSize
 
-        val tmp = LocalDate.now().dayOfWeek.value + 1
-        val todayDayOfWeek = if (tmp > 7) 1 else tmp
-        var commitDate = LocalDate.now().minusWeeks((weeks - 1).toLong()).let { it.minusDays((it.dayOfWeek.value).toLong()) }
+        val todayDayOfWeek = if (isMondayStart) {
+            LocalDate.now().dayOfWeek.value
+        } else {
+            val tmp = LocalDate.now().dayOfWeek.value + 1
+            if (tmp > 7) 1 else tmp
+        }
+
+        var commitDate = LocalDate.now().minusWeeks((weeks - 1).toLong()).let {
+            it.minusDays((it.dayOfWeek.value - if (isMondayStart) 1 else 0).toLong())
+        }
 
         // (x1,y1,x2,y2,paint) 左上の座標(x1,y1), 右下の座標(x2,y2)
         for (week in 1..weeks) {
