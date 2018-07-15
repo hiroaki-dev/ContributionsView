@@ -146,10 +146,9 @@ class ContributionsView : View {
         for (week in 1..weeks) {
             var y1 = spaceTop
             var y2 = y1 + squareSize
-            for (n in 7 downTo 1) {
+            for (n in 1..7) {
                 if (week == weeks && n > todayDayOfWeek) break
-                val commitDate = LocalDate.now().minusDays(((weeks - week) * 7 + n - 1).toLong())
-
+                val commitDate = LocalDate.now().minusDays(((weeks - week) * 7).toLong()).plusDays((n - 1).toLong())
                 // 月の描画
                 if (commitDate.dayOfMonth == 1) drawMonth(canvas, commitDate.month, x1, paddingTop.toFloat())
 
