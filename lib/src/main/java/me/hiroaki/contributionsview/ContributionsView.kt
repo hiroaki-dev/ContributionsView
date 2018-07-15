@@ -23,7 +23,7 @@ class ContributionsView : View {
     private val contributionsLeftSpace: Float
     private val contributionsTopSpace: Float
     private var contributions: HashMap<LocalDate, Int> = HashMap()
-    private var isMondayStart: Boolean
+    var isMondayStart: Boolean
         set(value) {
             field = value
             invalidate()

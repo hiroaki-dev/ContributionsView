@@ -27,5 +27,9 @@ class MainActivity : AppCompatActivity() {
             val tmp = LocalDate.now().minusDays(1)
             contributionsView.addCommit(tmp, 1)
         }
+
+        changeDayOfWeekStart.setOnClickListener {
+            contributionsView.isMondayStart = !contributionsView.isMondayStart
+        }
     }
 }
