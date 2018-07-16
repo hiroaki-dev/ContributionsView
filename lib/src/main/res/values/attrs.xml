@@ -19,5 +19,11 @@
         <attr name="month_font_color" format="color"/>
 
         <attr name="is_monday_start" format="boolean"/>
+        
+        <attr name="legend_text_space" format="dimension"/>
+        <attr name="legend_square_space" format="dimension"/>
+        <attr name="legend_square_size" format="dimension"/>
+        <attr name="legend_font_size" format="dimension"/>
+        <attr name="legend_top_space" format="dimension"/>
     </declare-styleable>
 </resources>

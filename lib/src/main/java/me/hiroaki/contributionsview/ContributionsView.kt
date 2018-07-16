@@ -16,6 +16,11 @@ class ContributionsView : View {
 
     private val monthPaint: MonthPaint
     private val dayOfWeekPaint: DayOfWeekPaint
+    private val legendPaint: LegendPaint
+    private val legendTextSpace: Float
+    private val legendSquareSpace: Float
+    private val legendSquareSize: Float
+    private val legendTopSpace: Float
     private val squareSize: Float
     private val squarePaint: SquarePaint
     private val squareVerticalSpace: Float
@@ -89,6 +94,17 @@ class ContributionsView : View {
                 xmlAttributes.getColor(R.styleable.ContributionsView_month_font_color, Color.GRAY)
         )
 
+        legendPaint = LegendPaint(
+                xmlAttributes.getDimension(R.styleable.ContributionsView_legend_font_size, 31.5f),
+                Color.GRAY,
+                "Lesg",
+                "More"
+        )
+        legendTextSpace = xmlAttributes.getDimension(R.styleable.ContributionsView_legend_text_space, 15f)
+        legendSquareSpace = xmlAttributes.getDimension(R.styleable.ContributionsView_legend_square_space, 9f)
+        legendSquareSize = xmlAttributes.getDimension(R.styleable.ContributionsView_legend_square_size, 32f)
+        legendTopSpace = xmlAttributes.getDimension(R.styleable.ContributionsView_legend_top_space, 15f)
+
         xmlAttributes.recycle()
     }
 
@@ -133,6 +149,12 @@ class ContributionsView : View {
                 paddingTop + monthPaint.getTextHeight() + contributionsTopSpace,
                 paddingEnd.toFloat()
         )
+
+        drawLegend(
+                canvas,
+                paddingTop + monthPaint.getTextHeight() + contributionsTopSpace + squareSize * 7 + squareVerticalSpace * 6 + legendTopSpace,
+                paddingEnd.toFloat() 
+        )
     }
 
     private fun drawDayOfWeek(canvas: Canvas, spaceLeft: Float = 0f, spaceTop: Float = 0f) {
@@ -157,6 +179,51 @@ class ContributionsView : View {
                             dayOfWeekPaint.getPaint()
                     )
                 }
+    }
+
+    private fun drawLegend(canvas: Canvas, spaceTop: Float = 0f, spaceRight: Float = 0f) {
+        val legendAreaWidth = legendSquareSize * 5 + legendSquareSpace * 4 + legendPaint.getLessWidth() + legendPaint.getMoreWidth() + legendTextSpace * 2
+        var x = canvas.width - spaceRight - legendAreaWidth
+        val diff = Math.abs(legendPaint.getTextHeight() - legendSquareSize)
+        val textY = if (legendPaint.getTextHeight() > legendSquareSize) {
+            spaceTop + legendPaint.getTextHeight() - legendPaint.getFontTopSpace()
+        } else {
+            spaceTop + legendPaint.getTextHeight() + diff / 2 - legendPaint.getFontTopSpace()
+        }
+
+        canvas.drawText(
+                legendPaint.lessText,
+                x,
+                textY,
+                legendPaint.getPaint()
+        )
+
+        x += legendPaint.getLessWidth() + legendTextSpace
+        val squareY1 = if (legendPaint.getTextHeight() > legendSquareSize) {
+            spaceTop + diff / 2
+        } else {
+            spaceTop
+        }
+        val squareY2 = squareY1 + legendSquareSize
+
+        for (i in 0..4) {
+            canvas.drawRect(
+                    x,
+                    squareY1,
+                    x + legendSquareSize,
+                    squareY2,
+                    squarePaint.getPaint(i)
+            )
+            x += legendSquareSize + if (i < 4) legendSquareSpace else legendTextSpace
+        }
+
+        canvas.drawText(
+                legendPaint.moreText,
+                x,
+                textY,
+                legendPaint.getPaint()
+        )
+
     }
 
     private fun drawContributions(canvas: Canvas, spaceLeft: Float = 0f, spaceTop: Float = 0f, spaceRight: Float = 0f) {
