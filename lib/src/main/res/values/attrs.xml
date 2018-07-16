@@ -14,6 +14,7 @@
 
         <attr name="day_of_week_font_size" format="dimension"/>
         <attr name="day_of_week_font_color" format="color"/>
+        <attr name="is_display_day_of_week" format="boolean"/>
 
         <attr name="month_font_size" format="dimension"/>
         <attr name="month_font_color" format="color"/>

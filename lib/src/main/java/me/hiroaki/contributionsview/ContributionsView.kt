@@ -17,6 +17,7 @@ class ContributionsView : View {
     private val monthPaint: MonthPaint
     private val isDisplayMonth: Boolean
     private val dayOfWeekPaint: DayOfWeekPaint
+    private val isDisplayDayOfWeek: Boolean
     private val legendPaint: LegendPaint
     private val legendTextSpace: Float
     private val legendSquareSpace: Float
@@ -88,6 +89,7 @@ class ContributionsView : View {
                 xmlAttributes.getColor(R.styleable.ContributionsView_day_of_week_font_color, Color.GRAY),
                 dayOfWeeks = *defaultDayOfWeeks
         )
+        isDisplayDayOfWeek = xmlAttributes.getBoolean(R.styleable.ContributionsView_is_display_day_of_week, true)
 
 
         monthPaint = MonthPaint(
@@ -140,15 +142,17 @@ class ContributionsView : View {
     override fun onDraw(canvas: Canvas) {
         val offsetStart = (canvas.width - dayOfWeekPaint.getDayOfWeekWidth() - paddingStart - paddingEnd - contributionsLeftSpace) % (squareSize + squareHorizontalSpace) / 2
 
-        drawDayOfWeek(
-                canvas,
-                paddingStart.toFloat(),
-                paddingTop + if (isDisplayMonth) { monthPaint.getTextHeight() } else { 0f }
-        )
+        if (isDisplayDayOfWeek) {
+            drawDayOfWeek(
+                    canvas,
+                    paddingStart.toFloat(),
+                    paddingTop + if (isDisplayMonth) { monthPaint.getTextHeight() } else { 0f }
+            )
+        }
 
         drawContributions(
                 canvas,
-                paddingStart + offsetStart + dayOfWeekPaint.getDayOfWeekWidth() + contributionsLeftSpace,
+                paddingStart + offsetStart + if (isDisplayDayOfWeek) { dayOfWeekPaint.getDayOfWeekWidth() + contributionsLeftSpace } else 0f,
                 paddingTop + if (isDisplayMonth) { monthPaint.getTextHeight() + contributionsTopSpace } else { 0f },
                 paddingEnd.toFloat()
         )
