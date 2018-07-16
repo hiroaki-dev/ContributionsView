@@ -49,10 +49,11 @@ class ContributionsView : View {
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
         AndroidThreeTen.init(context)
+        val dpi = resources.displayMetrics.density
         val xmlAttributes = context.obtainStyledAttributes(attrs, R.styleable.ContributionsView)
-        squareSize = xmlAttributes.getDimension(R.styleable.ContributionsView_square_size, 32f)
-        squareVerticalSpace = xmlAttributes.getDimension(R.styleable.ContributionsView_square_vertical_space, 9f)
-        squareHorizontalSpace = xmlAttributes.getDimension(R.styleable.ContributionsView_square_vertical_space, 9f)
+        squareSize = xmlAttributes.getDimension(R.styleable.ContributionsView_square_size, 15 * dpi)
+        squareVerticalSpace = xmlAttributes.getDimension(R.styleable.ContributionsView_square_vertical_space, 4 * dpi)
+        squareHorizontalSpace = xmlAttributes.getDimension(R.styleable.ContributionsView_square_vertical_space, 4 * dpi)
         squarePaint = SquarePaint(
                 xmlAttributes.getColor(
                         R.styleable.ContributionsView_square_color_of_no_commit,
@@ -76,8 +77,8 @@ class ContributionsView : View {
                 )
         )
 
-        contributionsLeftSpace = xmlAttributes.getDimension(R.styleable.ContributionsView_contributions_left_space, 9f)
-        contributionsTopSpace = xmlAttributes.getDimension(R.styleable.ContributionsView_contributions_top_space, 15f)
+        contributionsLeftSpace = xmlAttributes.getDimension(R.styleable.ContributionsView_contributions_left_space, 4 * dpi)
+        contributionsTopSpace = xmlAttributes.getDimension(R.styleable.ContributionsView_contributions_top_space, 7 * dpi)
 
         isMondayStart = xmlAttributes.getBoolean(R.styleable.ContributionsView_is_monday_start, true)
         val defaultDayOfWeeks = if (isMondayStart) {
@@ -86,7 +87,7 @@ class ContributionsView : View {
             arrayOf(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY)
         }
         dayOfWeekPaint = DayOfWeekPaint(
-                xmlAttributes.getDimension(R.styleable.ContributionsView_day_of_week_font_size, 31.5f),
+                xmlAttributes.getDimension(R.styleable.ContributionsView_day_of_week_font_size, 15 * dpi),
                 xmlAttributes.getColor(R.styleable.ContributionsView_day_of_week_font_color, Color.GRAY),
                 dayOfWeeks = *defaultDayOfWeeks
         )
@@ -94,21 +95,21 @@ class ContributionsView : View {
 
 
         monthPaint = MonthPaint(
-                xmlAttributes.getDimension(R.styleable.ContributionsView_month_font_size, 31.5f),
+                xmlAttributes.getDimension(R.styleable.ContributionsView_month_font_size, 15 * dpi),
                 xmlAttributes.getColor(R.styleable.ContributionsView_month_font_color, Color.GRAY)
         )
         isDisplayMonth = xmlAttributes.getBoolean(R.styleable.ContributionsView_is_display_month, true)
 
         legendPaint = LegendPaint(
-                xmlAttributes.getDimension(R.styleable.ContributionsView_legend_font_size, 31.5f),
+                xmlAttributes.getDimension(R.styleable.ContributionsView_legend_font_size, 15 * dpi),
                 Color.GRAY,
-                "Lesg",
+                "Less",
                 "More"
         )
-        legendTextSpace = xmlAttributes.getDimension(R.styleable.ContributionsView_legend_text_space, 15f)
-        legendSquareSpace = xmlAttributes.getDimension(R.styleable.ContributionsView_legend_square_space, 9f)
-        legendSquareSize = xmlAttributes.getDimension(R.styleable.ContributionsView_legend_square_size, 32f)
-        legendTopSpace = xmlAttributes.getDimension(R.styleable.ContributionsView_legend_top_space, 15f)
+        legendTextSpace = xmlAttributes.getDimension(R.styleable.ContributionsView_legend_text_space, 7 * dpi)
+        legendSquareSpace = xmlAttributes.getDimension(R.styleable.ContributionsView_legend_square_space, 4 * dpi)
+        legendSquareSize = xmlAttributes.getDimension(R.styleable.ContributionsView_legend_square_size, 15 * dpi)
+        legendTopSpace = xmlAttributes.getDimension(R.styleable.ContributionsView_legend_top_space, 7 * dpi)
         isDisplayLegend = xmlAttributes.getBoolean(R.styleable.ContributionsView_is_display_legend, true)
 
         xmlAttributes.recycle()
