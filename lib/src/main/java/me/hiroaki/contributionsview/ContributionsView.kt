@@ -124,13 +124,13 @@ class ContributionsView : View {
         drawDayOfWeek(
                 canvas,
                 paddingStart.toFloat(),
-                paddingTop + monthPaint.getMonthHeight()
+                paddingTop + monthPaint.getTextHeight()
         )
 
         drawContributions(
                 canvas,
                 paddingStart + offsetStart + dayOfWeekPaint.getDayOfWeekWidth() + contributionsLeftSpace,
-                paddingTop + monthPaint.getMonthHeight() + contributionsTopSpace,
+                paddingTop + monthPaint.getTextHeight() + contributionsTopSpace,
                 paddingEnd.toFloat()
         )
     }
@@ -153,7 +153,7 @@ class ContributionsView : View {
                     canvas.drawText(
                             dayOfWeekPaint.dayOfWeeks[d],
                             spaceLeft,
-                            spaceTop + n * squareSize + n * squareVerticalSpace + dayOfWeekPaint.fontSize,
+                            spaceTop + n * squareSize + n * squareVerticalSpace + dayOfWeekPaint.getTextHeight(),
                             dayOfWeekPaint.getPaint()
                     )
                 }
@@ -208,7 +208,7 @@ class ContributionsView : View {
         canvas.drawText(
                 monthInfo.first,
                 spaceLeft + squareSize / 2 - monthInfo.second / 2,
-                spaceTop + monthPaint.getMonthHeight(),
+                spaceTop + monthPaint.getTextHeight(),
                 monthPaint.getPaint()
         )
     }

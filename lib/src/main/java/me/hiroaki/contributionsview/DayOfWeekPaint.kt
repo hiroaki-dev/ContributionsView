@@ -20,6 +20,7 @@ class DayOfWeekPaint(
         isAntiAlias = true
     }
 
+    fun getTextHeight(): Float = fontSize
 
     fun getDayOfWeekWidth(): Float = dayOfWeeks.map { d -> dayOfWeekPaint.measureText(d.value) }.max() ?: 0f
 

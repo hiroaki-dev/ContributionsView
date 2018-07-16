@@ -12,21 +12,19 @@ class MonthPaint(
         private val locale: Locale = Locale.ENGLISH
 ) {
 
-    private val dayOfWeekPaint = Paint().apply {
+    private val monthPaint = Paint().apply {
         color = textColor
         textSize = fontSize
         isAntiAlias = true
     }
 
 
-    fun getMonthHeight(): Float {
-        return fontSize
-    }
+    fun getTextHeight(): Float = fontSize
 
     fun getMonth(month: Month): Pair<String, Float> {
         val monthText = month.getDisplayName(textStyle, locale)
-        return Pair(monthText, dayOfWeekPaint.measureText(monthText))
+        return Pair(monthText, monthPaint.measureText(monthText))
     }
 
-    fun getPaint(): Paint = this.dayOfWeekPaint
+    fun getPaint(): Paint = this.monthPaint
 }
