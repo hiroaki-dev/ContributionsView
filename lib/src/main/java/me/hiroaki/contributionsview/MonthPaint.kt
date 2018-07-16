@@ -19,7 +19,7 @@ class MonthPaint(
     }
 
 
-    fun getTextHeight(): Float = fontSize
+    fun getTextHeight(): Float = monthPaint.fontMetrics.descent - monthPaint.fontMetrics.ascent
 
     fun getMonth(month: Month): Pair<String, Float> {
         val monthText = month.getDisplayName(textStyle, locale)

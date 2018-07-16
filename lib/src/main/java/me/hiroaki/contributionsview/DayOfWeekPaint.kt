@@ -6,7 +6,7 @@ import org.threeten.bp.format.TextStyle
 import java.util.*
 
 class DayOfWeekPaint(
-        val fontSize: Float,
+        private val fontSize: Float,
         private val textColor: Int,
         private val textStyle: TextStyle = TextStyle.SHORT,
         private val locale: Locale = Locale.ENGLISH,
@@ -20,7 +20,7 @@ class DayOfWeekPaint(
         isAntiAlias = true
     }
 
-    fun getTextHeight(): Float = fontSize
+    fun getTextHeight(): Float = dayOfWeekPaint.fontMetrics.bottom - dayOfWeekPaint.fontMetrics.top
 
     fun getDayOfWeekWidth(): Float = dayOfWeeks.map { d -> dayOfWeekPaint.measureText(d.value) }.max() ?: 0f
 
