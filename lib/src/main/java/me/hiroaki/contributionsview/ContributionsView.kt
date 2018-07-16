@@ -15,6 +15,7 @@ import java.util.*
 class ContributionsView : View {
 
     private val monthPaint: MonthPaint
+    private val isDisplayMonth: Boolean
     private val dayOfWeekPaint: DayOfWeekPaint
     private val legendPaint: LegendPaint
     private val legendTextSpace: Float
@@ -93,6 +94,7 @@ class ContributionsView : View {
                 xmlAttributes.getDimension(R.styleable.ContributionsView_month_font_size, 31.5f),
                 xmlAttributes.getColor(R.styleable.ContributionsView_month_font_color, Color.GRAY)
         )
+        isDisplayMonth = xmlAttributes.getBoolean(R.styleable.ContributionsView_is_display_month, true)
 
         legendPaint = LegendPaint(
                 xmlAttributes.getDimension(R.styleable.ContributionsView_legend_font_size, 31.5f),
@@ -127,8 +129,8 @@ class ContributionsView : View {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val minWidth = width
-        val minHeight = paddingTop + monthPaint.getTextHeight() +
-                contributionsTopSpace + squareSize * 7 + squareVerticalSpace * 6 +
+        val minHeight = paddingTop + if (isDisplayMonth) { monthPaint.getTextHeight() + contributionsTopSpace } else { 0f } +
+                squareSize * 7 + squareVerticalSpace * 6 +
                 legendTopSpace + if (legendPaint.getTextHeight() > legendSquareSize) { legendPaint.getHeight() } else { legendSquareSize } +
                 paddingBottom
 
@@ -141,19 +143,19 @@ class ContributionsView : View {
         drawDayOfWeek(
                 canvas,
                 paddingStart.toFloat(),
-                paddingTop + monthPaint.getTextHeight()
+                paddingTop + if (isDisplayMonth) { monthPaint.getTextHeight() } else { 0f }
         )
 
         drawContributions(
                 canvas,
                 paddingStart + offsetStart + dayOfWeekPaint.getDayOfWeekWidth() + contributionsLeftSpace,
-                paddingTop + monthPaint.getTextHeight() + contributionsTopSpace,
+                paddingTop + if (isDisplayMonth) { monthPaint.getTextHeight() + contributionsTopSpace } else { 0f },
                 paddingEnd.toFloat()
         )
 
         drawLegend(
                 canvas,
-                paddingTop + monthPaint.getTextHeight() + contributionsTopSpace + squareSize * 7 + squareVerticalSpace * 6 + legendTopSpace,
+                paddingTop + if (isDisplayMonth) { monthPaint.getTextHeight() + contributionsTopSpace } else { 0f } + squareSize * 7 + squareVerticalSpace * 6 + legendTopSpace,
                 paddingEnd.toFloat() 
         )
     }
@@ -250,7 +252,7 @@ class ContributionsView : View {
             for (n in 1..7) {
                 if (week == weeks && n > todayDayOfWeek) break
                 // 月の描画
-                if (commitDate.dayOfMonth == 1) drawMonth(canvas, commitDate.month, x1, paddingTop.toFloat())
+                if (isDisplayMonth && commitDate.dayOfMonth == 1) drawMonth(canvas, commitDate.month, x1, paddingTop.toFloat())
 
                 // 四角の描画
                 canvas.drawRect(
