@@ -27,5 +27,6 @@
         <attr name="legend_square_size" format="dimension"/>
         <attr name="legend_font_size" format="dimension"/>
         <attr name="legend_top_space" format="dimension"/>
+        <attr name="is_display_legend" format="boolean"/>
     </declare-styleable>
 </resources>

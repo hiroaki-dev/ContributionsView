@@ -23,6 +23,7 @@ class ContributionsView : View {
     private val legendSquareSpace: Float
     private val legendSquareSize: Float
     private val legendTopSpace: Float
+    private val isDisplayLegend: Boolean
     private val squareSize: Float
     private val squarePaint: SquarePaint
     private val squareVerticalSpace: Float
@@ -108,6 +109,7 @@ class ContributionsView : View {
         legendSquareSpace = xmlAttributes.getDimension(R.styleable.ContributionsView_legend_square_space, 9f)
         legendSquareSize = xmlAttributes.getDimension(R.styleable.ContributionsView_legend_square_size, 32f)
         legendTopSpace = xmlAttributes.getDimension(R.styleable.ContributionsView_legend_top_space, 15f)
+        isDisplayLegend = xmlAttributes.getBoolean(R.styleable.ContributionsView_is_display_legend, true)
 
         xmlAttributes.recycle()
     }
@@ -133,8 +135,11 @@ class ContributionsView : View {
         val minWidth = width
         val minHeight = paddingTop + if (isDisplayMonth) { monthPaint.getTextHeight() + contributionsTopSpace } else { 0f } +
                 squareSize * 7 + squareVerticalSpace * 6 +
-                legendTopSpace + if (legendPaint.getTextHeight() > legendSquareSize) { legendPaint.getHeight() } else { legendSquareSize } +
-                paddingBottom
+                if (isDisplayLegend) {
+                    legendTopSpace + if (legendPaint.getTextHeight() > legendSquareSize) { legendPaint.getHeight() } else { legendSquareSize }
+                } else {
+                    0f
+                } + paddingBottom
 
         setMeasuredDimension(View.resolveSize(minWidth, widthMeasureSpec), View.resolveSize(minHeight.toInt(), heightMeasureSpec))
     }
@@ -157,11 +162,13 @@ class ContributionsView : View {
                 paddingEnd.toFloat()
         )
 
-        drawLegend(
-                canvas,
-                paddingTop + if (isDisplayMonth) { monthPaint.getTextHeight() + contributionsTopSpace } else { 0f } + squareSize * 7 + squareVerticalSpace * 6 + legendTopSpace,
-                paddingEnd.toFloat() 
-        )
+        if (isDisplayLegend) {
+            drawLegend(
+                    canvas,
+                    paddingTop + if (isDisplayMonth) { monthPaint.getTextHeight() + contributionsTopSpace } else { 0f } + squareSize * 7 + squareVerticalSpace * 6 + legendTopSpace,
+                    paddingEnd.toFloat()
+            )
+        }
     }
 
     private fun drawDayOfWeek(canvas: Canvas, spaceLeft: Float = 0f, spaceTop: Float = 0f) {
