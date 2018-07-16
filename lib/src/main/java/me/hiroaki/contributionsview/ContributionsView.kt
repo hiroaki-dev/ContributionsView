@@ -126,12 +126,13 @@ class ContributionsView : View {
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val dpi = resources.displayMetrics.density
+        val minWidth = width
+        val minHeight = paddingTop + monthPaint.getTextHeight() +
+                contributionsTopSpace + squareSize * 7 + squareVerticalSpace * 6 +
+                legendTopSpace + if (legendPaint.getTextHeight() > legendSquareSize) { legendPaint.getHeight() } else { legendSquareSize } +
+                paddingBottom
 
-        val minWidth = paddingStart + paddingEnd + (120 * dpi).toInt()
-        val minHeight = paddingTop + paddingBottom + (100 * dpi).toInt()
-
-        setMeasuredDimension(View.resolveSize(minWidth, widthMeasureSpec), View.resolveSize(minHeight, heightMeasureSpec))
+        setMeasuredDimension(View.resolveSize(minWidth, widthMeasureSpec), View.resolveSize(minHeight.toInt(), heightMeasureSpec))
     }
 
     override fun onDraw(canvas: Canvas) {
