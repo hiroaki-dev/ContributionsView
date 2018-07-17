@@ -40,7 +40,11 @@ class ContributionsView : View {
         }
 
     var startLocalDate: LocalDate private set
-    var endLocalDate: LocalDate private set
+    var endLocalDate: LocalDate
+        set(value) {
+            field = value
+            invalidate()
+        }
 
     private companion object {
         val TAG = ContributionsView::class.java.simpleName
@@ -193,7 +197,13 @@ class ContributionsView : View {
         time = DateTimeUtils.toSqlDate(endLocalDate)
     }
 
+    fun setEndDate(date: Date) {
+        endLocalDate = DateTimeUtils.toZonedDateTime(Calendar.getInstance().apply { time = date }).toLocalDate()
+    }
 
+    fun setEndCalendar(calendar: Calendar) {
+        endLocalDate = DateTimeUtils.toZonedDateTime(calendar).toLocalDate()
+    }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val minWidth = width

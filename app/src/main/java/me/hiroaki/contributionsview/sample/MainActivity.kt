@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
 //        HashMap<LocalDate, Int>().apply {
 //            put(LocalDate.now().minusDays(8.toLong()), 1)
 //            put(LocalDate.now().minusDays(6.toLong()), 3)
+//            put(LocalDate.now().minusMonths(9.toLong()), 5)
 //        }
 //    }
 
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity() {
 //        HashMap<Date, Int>().apply {
 //            put(Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, -8) }.time, 1)
 //            put(Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, -6) }.time, 3)
+//            put(Calendar.getInstance().apply { add(Calendar.MONTH, -9) }.time, 5)
 //        }
 //    }
 
@@ -29,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         HashMap<Calendar, Int>().apply {
             put(Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, -8) }, 1)
             put(Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, -6) }, 3)
+            put(Calendar.getInstance().apply { add(Calendar.MONTH, -9) }, 5)
         }
     }
 
@@ -55,6 +58,10 @@ class MainActivity : AppCompatActivity() {
 
         changeDayOfWeekStart.setOnClickListener {
             contributionsView.isMondayStart = !contributionsView.isMondayStart
+        }
+
+        showPreviousPage.setOnClickListener {
+            contributionsView.endLocalDate = contributionsView.startLocalDate.minusDays(1)
         }
     }
 }
