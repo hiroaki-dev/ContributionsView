@@ -6,10 +6,12 @@ import android.graphics.Color
 import android.util.AttributeSet
 import android.view.View
 import com.jakewharton.threetenabp.AndroidThreeTen
+import org.threeten.bp.DateTimeUtils
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.Month
 import java.util.*
+import kotlin.collections.HashMap
 
 
 class ContributionsView : View {
@@ -120,8 +122,21 @@ class ContributionsView : View {
         invalidate()
     }
 
+    fun setContributionsDateMap(contributions: HashMap<Date, Int>) {
+        this.contributions = contributions.mapKeysTo(HashMap()) {
+            DateTimeUtils.toZonedDateTime(Calendar.getInstance().apply { time = it.key }).toLocalDate()
+        }
+        invalidate()
+    }
+
     fun setCommit(date: LocalDate, amount: Int) {
         contributions[date] = amount
+        invalidate()
+    }
+
+    fun setCommit(date: Date, amount: Int) {
+        val localDate = DateTimeUtils.toZonedDateTime(Calendar.getInstance().apply { time = date }).toLocalDate()
+        contributions[localDate] = amount
         invalidate()
     }
 
@@ -129,6 +144,14 @@ class ContributionsView : View {
         val newAmount = (contributions[date] ?: 0) + amount
         if (newAmount < 0) throw InvalidAmountException(newAmount)
         contributions[date] = newAmount
+        invalidate()
+    }
+
+    fun addCommit(date: Date, amount: Int) {
+        val localDate = DateTimeUtils.toZonedDateTime(Calendar.getInstance().apply { time = date }).toLocalDate()
+        val newAmount = (contributions[localDate] ?: 0) + amount
+        if (newAmount < 0) throw InvalidAmountException(newAmount)
+        contributions[localDate] = newAmount
         invalidate()
     }
 
