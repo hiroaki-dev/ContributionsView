@@ -39,6 +39,9 @@ class ContributionsView : View {
             invalidate()
         }
 
+    var startLocalDate: LocalDate private set
+    var endLocalDate: LocalDate private set
+
     private companion object {
         val TAG = ContributionsView::class.java.simpleName
     }
@@ -51,6 +54,8 @@ class ContributionsView : View {
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
         AndroidThreeTen.init(context)
+        startLocalDate = LocalDate.now()
+        endLocalDate = LocalDate.now()
         val dpi = resources.displayMetrics.density
         val xmlAttributes = context.obtainStyledAttributes(attrs, R.styleable.ContributionsView)
         squareSize = xmlAttributes.getDimension(R.styleable.ContributionsView_square_size, 15 * dpi)
@@ -176,6 +181,20 @@ class ContributionsView : View {
         invalidate()
     }
 
+    fun getStartDate(): Date = DateTimeUtils.toSqlDate(startLocalDate)
+
+    fun getStartCalendar(): Calendar = Calendar.getInstance().apply {
+        time = DateTimeUtils.toSqlDate(startLocalDate)
+    }
+
+    fun getEndDate(): Date = DateTimeUtils.toSqlDate(endLocalDate)
+
+    fun getEndCalendar(): Calendar = Calendar.getInstance().apply {
+        time = DateTimeUtils.toSqlDate(endLocalDate)
+    }
+
+
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val minWidth = width
         val minHeight = paddingTop + if (isDisplayMonth) { monthPaint.getTextHeight() + contributionsTopSpace } else { 0f } +
@@ -291,13 +310,15 @@ class ContributionsView : View {
         var x2 = x1 + squareSize
 
         val todayDayOfWeek = if (isMondayStart) {
-            LocalDate.now().dayOfWeek.value
+            endLocalDate.dayOfWeek.value
         } else {
-            val tmp = LocalDate.now().dayOfWeek.value + 1
+            val tmp = endLocalDate.dayOfWeek.value + 1
             if (tmp > 7) 1 else tmp
         }
 
-        var commitDate = LocalDate.now().minusWeeks((weeks - 1).toLong()).let {
+        startLocalDate = endLocalDate.minusDays(((weeks - 1) * 7 + todayDayOfWeek - 1).toLong())
+
+        var commitDate = endLocalDate.minusWeeks((weeks - 1).toLong()).let {
             it.minusDays((it.dayOfWeek.value - if (isMondayStart) 1 else 0).toLong())
         }
 

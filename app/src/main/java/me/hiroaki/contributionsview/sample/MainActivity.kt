@@ -7,6 +7,10 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        private val TAG = MainActivity::class.java.simpleName
+    }
+
 //    private val sampleContributions by lazy {
 //        HashMap<LocalDate, Int>().apply {
 //            put(LocalDate.now().minusDays(8.toLong()), 1)
