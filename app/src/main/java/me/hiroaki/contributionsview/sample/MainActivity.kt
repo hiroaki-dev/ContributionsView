@@ -14,10 +14,17 @@ class MainActivity : AppCompatActivity() {
 //        }
 //    }
 
+//    private val sampleContributions by lazy {
+//        HashMap<Date, Int>().apply {
+//            put(Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, -8) }.time, 1)
+//            put(Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, -6) }.time, 3)
+//        }
+//    }
+
     private val sampleContributions by lazy {
-        HashMap<Date, Int>().apply {
-            put(Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, -8) }.time, 1)
-            put(Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, -6) }.time, 3)
+        HashMap<Calendar, Int>().apply {
+            put(Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, -8) }, 1)
+            put(Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, -6) }, 3)
         }
     }
 
@@ -26,16 +33,19 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 //        contributionsView.setContributionsMap(sampleContributions)
-        contributionsView.setContributionsDateMap(sampleContributions)
+//        contributionsView.setContributionsDateMap(sampleContributions)
+        contributionsView.setContributionsCalendarMap(sampleContributions)
 
         setTodayCommitButton.setOnClickListener {
 //            contributionsView.setCommit(LocalDate.now(), 7)
-            contributionsView.setCommit(Date(), 7)
+//            contributionsView.setCommit(Date(), 7)
+            contributionsView.setCommit(Calendar.getInstance(), 7)
         }
 
         addYesterdayDayCommitButton.setOnClickListener {
 //            val tmp = LocalDate.now().minusDays(1)
-            val tmp = Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, -1) }.time
+//            val tmp = Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, -1) }.time
+            val tmp = Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, -1) }
             contributionsView.addCommit(tmp, 1)
         }
 
