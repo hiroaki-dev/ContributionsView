@@ -3,6 +3,8 @@ package me.hiroaki.contributionsview
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
+import android.os.Parcel
+import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.View
 import com.jakewharton.threetenabp.AndroidThreeTen
@@ -10,6 +12,7 @@ import org.threeten.bp.DateTimeUtils
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.Month
+import org.threeten.bp.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -368,5 +371,69 @@ class ContributionsView : View {
                 spaceTop + monthPaint.getTextHeight(),
                 monthPaint.getPaint()
         )
+    }
+
+    override fun onSaveInstanceState(): Parcelable? {
+        val superState = super.onSaveInstanceState()
+        val state = SavedState(superState)
+        state.startLocalDate = startLocalDate
+        state.endLocalDate = endLocalDate
+        state.isMondayStart = isMondayStart
+        state.contributions = contributions
+        return state
+    }
+
+    public override fun onRestoreInstanceState(state: Parcelable) {
+        if (state !is SavedState) {
+            super.onRestoreInstanceState(state)
+            return
+        }
+        super.onRestoreInstanceState(state.superState)
+
+        startLocalDate = state.startLocalDate
+        endLocalDate = state.endLocalDate
+        isMondayStart = state.isMondayStart
+        contributions = state.contributions
+
+        invalidate()
+    }
+
+    class SavedState : View.BaseSavedState {
+        internal lateinit var startLocalDate: LocalDate
+        internal lateinit var endLocalDate: LocalDate
+        internal var isMondayStart: Boolean = true
+        internal lateinit var contributions: HashMap<LocalDate, Int>
+
+        internal constructor(superState: Parcelable) : super(superState)
+
+        internal constructor(source: Parcel) : super(source) {
+            startLocalDate = LocalDate.parse(source.readString(), FORMATTER)
+            endLocalDate = LocalDate.parse(source.readString(), FORMATTER)
+            isMondayStart = source.readValue(ClassLoader.getSystemClassLoader()) as Boolean
+            contributions = source.readHashMap(ClassLoader.getSystemClassLoader()) as HashMap<LocalDate, Int>
+        }
+
+        override fun writeToParcel(out: Parcel, flags: Int) {
+            super.writeToParcel(out, flags)
+
+            out.writeString(startLocalDate.format(FORMATTER))
+            out.writeString(endLocalDate.format(FORMATTER))
+            out.writeValue(isMondayStart)
+            out.writeSerializable(contributions)
+        }
+
+        companion object {
+            private val FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+            val CREATOR: Parcelable.Creator<SavedState> = object : Parcelable.Creator<SavedState> {
+                override fun createFromParcel(`in`: Parcel): SavedState {
+                    return SavedState(`in`)
+                }
+
+                override fun newArray(size: Int): Array<SavedState> {
+                    return newArray(size)
+                }
+            }
+        }
     }
 }
