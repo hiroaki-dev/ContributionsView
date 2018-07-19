@@ -3,7 +3,9 @@ package me.hiroaki.contributionsview.sample
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import me.hiroaki.contributionsview.Evaluation
 import java.util.*
+import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,6 +37,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private val sampleEvaluations: Map<Evaluation, Int> = HashMap<Evaluation, Int>().apply {
+        put(Evaluation.E, 2)
+        put(Evaluation.D, 4)
+        put(Evaluation.C, 6)
+        put(Evaluation.B, 8)
+        put(Evaluation.A, 10)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -62,6 +72,10 @@ class MainActivity : AppCompatActivity() {
 
         showPreviousPage.setOnClickListener {
             contributionsView.endLocalDate = contributionsView.startLocalDate.minusDays(1)
+        }
+
+        changeEvaluations.setOnClickListener {
+            contributionsView.setEvaluations(sampleEvaluations)
         }
     }
 }

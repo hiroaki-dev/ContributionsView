@@ -36,6 +36,13 @@ class ContributionsView : View {
     private val contributionsLeftSpace: Float
     private val contributionsTopSpace: Float
     private var contributions: HashMap<LocalDate, Int> = HashMap()
+    private var evaluations: Map<Evaluation, Int> = HashMap<Evaluation, Int>().apply {
+        put(Evaluation.E, 0)
+        put(Evaluation.D, 1)
+        put(Evaluation.C, 2)
+        put(Evaluation.B, 3)
+        put(Evaluation.A, 4)
+    }
     var isMondayStart: Boolean
         set(value) {
             field = value
@@ -88,7 +95,8 @@ class ContributionsView : View {
                 xmlAttributes.getColor(
                         R.styleable.ContributionsView_square_color_of_over_four_commit,
                         Color.argb(255, 47, 94, 46)
-                )
+                ),
+                evaluations
         )
 
         contributionsLeftSpace = xmlAttributes.getDimension(R.styleable.ContributionsView_contributions_left_space, 4 * dpi)
@@ -127,6 +135,12 @@ class ContributionsView : View {
         isDisplayLegend = xmlAttributes.getBoolean(R.styleable.ContributionsView_is_display_legend, true)
 
         xmlAttributes.recycle()
+    }
+
+    fun setEvaluations(evaluations: Map<Evaluation, Int>) {
+        this.evaluations = evaluations
+        squarePaint.evaluations = this.evaluations
+        invalidate()
     }
 
     fun setContributionsMap(contributions: HashMap<LocalDate, Int>) {
@@ -297,16 +311,17 @@ class ContributionsView : View {
         }
         val squareY2 = squareY1 + legendSquareSize
 
-        for (i in 0..4) {
-            canvas.drawRect(
-                    x,
-                    squareY1,
-                    x + legendSquareSize,
-                    squareY2,
-                    squarePaint.getPaint(i)
-            )
-            x += legendSquareSize + if (i < 4) legendSquareSpace else legendTextSpace
-        }
+        evaluations.toSortedMap(kotlin.Comparator { o1, o2 -> o1.ordinal - o2.ordinal })
+                .forEach { e, _ ->
+                    canvas.drawRect(
+                            x,
+                            squareY1,
+                            x + legendSquareSize,
+                            squareY2,
+                            squarePaint.getPaint(e)
+                    )
+                    x += legendSquareSize + if (e == Evaluation.A) legendTextSpace else legendSquareSpace
+                }
 
         canvas.drawText(
                 legendPaint.moreText,
