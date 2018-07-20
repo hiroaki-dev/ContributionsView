@@ -1,8 +1,0 @@
-<resources>
-    <string name="app_name">ContributionsView</string>
-    <string name="set_today_commit">set today commit</string>
-    <string name="add_yesterday_commit">add yesterday commit</string>
-    <string name="change_day_of_week_start">change day of week start</string>
-    <string name="show_previous_page">show previous page</string>
-    <string name="change_evaluations">change evaluations</string>
-</resources>
