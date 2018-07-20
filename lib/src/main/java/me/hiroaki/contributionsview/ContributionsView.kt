@@ -181,7 +181,6 @@ class ContributionsView : View {
 
     fun addCommit(localDate: LocalDate, amount: Int) {
         val newAmount = (contributions[localDate] ?: 0) + amount
-        if (newAmount < 0) throw InvalidAmountException(newAmount)
         contributions[localDate] = newAmount
         invalidate()
     }
@@ -189,7 +188,6 @@ class ContributionsView : View {
     fun addCommit(date: Date, amount: Int) {
         val localDate = DateTimeUtils.toZonedDateTime(Calendar.getInstance().apply { time = date }).toLocalDate()
         val newAmount = (contributions[localDate] ?: 0) + amount
-        if (newAmount < 0) throw InvalidAmountException(newAmount)
         contributions[localDate] = newAmount
         invalidate()
     }
@@ -197,7 +195,6 @@ class ContributionsView : View {
     fun addCommit(calendar: Calendar, amount: Int) {
         val localDate = DateTimeUtils.toZonedDateTime(calendar).toLocalDate()
         val newAmount = (contributions[localDate] ?: 0) + amount
-        if (newAmount < 0) throw InvalidAmountException(newAmount)
         contributions[localDate] = newAmount
         invalidate()
     }
