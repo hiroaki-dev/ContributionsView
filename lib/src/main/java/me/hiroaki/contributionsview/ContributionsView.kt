@@ -395,6 +395,7 @@ class ContributionsView : View {
         state.endLocalDate = endLocalDate
         state.isMondayStart = isMondayStart
         state.contributions = contributions
+        state.evaluations = evaluations
         return state
     }
 
@@ -409,6 +410,7 @@ class ContributionsView : View {
         endLocalDate = state.endLocalDate
         isMondayStart = state.isMondayStart
         contributions = state.contributions
+        setEvaluations(state.evaluations)
 
         invalidate()
     }
@@ -418,6 +420,7 @@ class ContributionsView : View {
         internal lateinit var endLocalDate: LocalDate
         internal var isMondayStart: Boolean = true
         internal lateinit var contributions: HashMap<LocalDate, Int>
+        internal lateinit var evaluations: Map<Evaluation, Int>
 
         internal constructor(superState: Parcelable) : super(superState)
 
@@ -426,6 +429,7 @@ class ContributionsView : View {
             endLocalDate = LocalDate.parse(source.readString(), FORMATTER)
             isMondayStart = source.readValue(ClassLoader.getSystemClassLoader()) as Boolean
             contributions = source.readHashMap(ClassLoader.getSystemClassLoader()) as HashMap<LocalDate, Int>
+            evaluations = source.readHashMap(ClassLoader.getSystemClassLoader()) as Map<Evaluation, Int>
         }
 
         override fun writeToParcel(out: Parcel, flags: Int) {
@@ -435,6 +439,7 @@ class ContributionsView : View {
             out.writeString(endLocalDate.format(FORMATTER))
             out.writeValue(isMondayStart)
             out.writeSerializable(contributions)
+            out.writeMap(evaluations)
         }
 
         companion object {
